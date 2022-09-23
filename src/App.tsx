@@ -1,3 +1,4 @@
+import { Button } from 'antd'
 import logo from './logo.svg'
 import './App.css'
 
@@ -17,6 +18,7 @@ const App = (): JSX.Element => {
         >
           Learn React
         </a>
+        <Button type='primary'>My Button</Button>
       </header>
     </div>
   )
