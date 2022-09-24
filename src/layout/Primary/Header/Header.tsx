@@ -1,27 +1,28 @@
-import { Layout, Space, Menu, Badge, Button, Avatar, Typography } from "antd";
-import { GithubOutlined } from "@ant-design/icons";
-import { HeaderProps } from "./Header.props";
-import "./Header.css";
+import { Layout, Space, Menu, Badge, Button, Avatar, Typography } from 'antd'
+import { GithubOutlined } from '@ant-design/icons'
+import { useLocation } from 'react-router-dom'
+import { HeaderProps } from './Header.props'
+import './Header.css'
 
-const { Header: AntHeader } = Layout;
-const { Link: AntLink } = Typography;
+const { Header: AntHeader } = Layout
+const { Link: AntLink } = Typography
 
 export const Header = (props: HeaderProps): JSX.Element => (
   <AntHeader
-    className="headerContainer"
+    className='headerContainer'
     style={{ backgroundColor: props.backgroundColor }}
   >
     {props.repoHref && (
-      <AntLink href={props.repoHref} target="_blank" className="ghLink">
-        <GithubOutlined className="headerLogo" />
+      <AntLink href={props.repoHref} target='_blank' className='ghLink'>
+        <GithubOutlined className='headerLogo' />
       </AntLink>
     )}
 
     {props.routes && (
       <Menu
-        mode="horizontal"
+        mode='horizontal'
         selectedKeys={props.selectedKeys}
-        className="routesMenu"
+        className='routesMenu'
         style={{
           backgroundColor: props.backgroundColor,
         }}
@@ -36,18 +37,18 @@ export const Header = (props: HeaderProps): JSX.Element => (
       </Menu>
     )}
 
-    <Space align="center">
+    <Space align='center'>
       {props.badgeIcon && (
         <Badge count={props.badgeCount}>
           <Button
             icon={props.badgeIcon}
-            shape="circle"
-            size="small"
-            type="link"
+            shape='circle'
+            size='small'
+            type='link'
           />
         </Badge>
       )}
       {props.avatarImageSrc && <Avatar src={props.avatarImageSrc} />}
     </Space>
   </AntHeader>
-);
+)
