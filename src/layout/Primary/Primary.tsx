@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { Breadcrumb, Layout as AntLayout } from 'antd'
 import { BellOutlined, HomeOutlined } from '@ant-design/icons'
@@ -33,12 +32,7 @@ export const Primary = (): JSX.Element => {
             {current?.icon ?? <HomeOutlined />} {breadcrumb}
           </Breadcrumb.Item>
         </Breadcrumb>
-        <div
-          className='site-layout-background'
-          style={{ padding: 24, flex: 1 }}
-        >
-          <Outlet />
-        </div>
+        <Outlet />
       </Content>
       <Footer style={{ textAlign: 'center' }}>
         CEDE Labs Frontend Challenge (2022)

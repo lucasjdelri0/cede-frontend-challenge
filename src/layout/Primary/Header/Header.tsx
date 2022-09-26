@@ -1,6 +1,5 @@
 import { Layout, Space, Menu, Badge, Button, Avatar, Typography } from 'antd'
 import { GithubOutlined } from '@ant-design/icons'
-import { useLocation } from 'react-router-dom'
 import { HeaderProps } from './Header.props'
 import './Header.css'
 

@@ -1,20 +1,12 @@
 import { ReactNode } from 'react'
-
-export interface Route {
-  path: string
-  heading: string
-  title: string
-  icon: ReactNode
-}
-
-export type MyRoutes = Route[]
+import { AppRoutes } from 'utils/routes'
 
 export interface HeaderProps {
   backgroundColor?: string
   tabColor?: string
   repoHref?: string
   selectedKeys?: string[]
-  routes?: MyRoutes
+  routes?: AppRoutes
   badgeCount?: number
   badgeIcon?: ReactNode
   avatarImageSrc?: string
