@@ -19,7 +19,7 @@ const wishlistSlice = createSlice({
       const filtered = state.nfts.filter(
         // eslint-disable-next-line @typescript-eslint/naming-convention
         ({ token_address, token_id }) =>
-          token_address !== action.payload.token_address &&
+          token_address !== action.payload.token_address ||
           token_id !== action.payload.token_id
       )
       state.nfts = filtered
