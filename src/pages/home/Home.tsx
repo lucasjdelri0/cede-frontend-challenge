@@ -1,3 +1,5 @@
+import Page from 'components/Page'
+
 export const Home = (): JSX.Element => {
-  return <div>Home</div>
+  return <Page>Home</Page>
 }

@@ -33,12 +33,7 @@ export const Primary = (): JSX.Element => {
             {current?.icon ?? <HomeOutlined />} {breadcrumb}
           </Breadcrumb.Item>
         </Breadcrumb>
-        <div
-          className='site-layout-background'
-          style={{ padding: 24, flex: 1 }}
-        >
-          <Outlet />
-        </div>
+        <Outlet />
       </Content>
       <Footer style={{ textAlign: 'center' }}>
         CEDE Labs Frontend Challenge (2022)

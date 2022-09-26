@@ -6,6 +6,13 @@ import App from './App'
 import reportWebVitals from './reportWebVitals'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
+
+declare global {
+  interface Window {
+    ethereum: any
+  }
+}
+
 root.render(
   <React.StrictMode>
     <BrowserRouter>
