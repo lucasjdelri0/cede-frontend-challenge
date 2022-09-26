@@ -86,58 +86,57 @@ export const Explore = (): JSX.Element => {
 
   return (
     <Page>
-      <div style={{ display: 'flex', flex: 1 }}>
-        <div
-          style={{
-            width: '80%',
-            padding: '0 24px',
-            display: 'flex',
-            flexDirection: 'column',
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          flex: 1,
+          padding: '0 24px',
+        }}
+      >
+        <span style={{ marginBottom: 16 }}>
+          Search NFTs by wallet, contract address, or collection name
+        </span>
+        <InputSearch
+          placeholder='Type a wallet, contract address, or collection name'
+          onChange={(searchValue) => setSearch(searchValue ?? '')}
+          isLoading={loading}
+        />
+        <List
+          grid={{
+            gutter: 16,
+            xs: 1,
+            sm: 2,
+            md: 3,
+            xl: 4,
           }}
-        >
-          <span style={{ marginBottom: 16 }}>Explore</span>
-          <InputSearch
-            placeholder='Type a wallet, contract address, or collection name'
-            onChange={(searchValue) => setSearch(searchValue ?? '')}
-            isLoading={loading}
-          />
-          <List
-            grid={{
-              gutter: 16,
-              xs: 1,
-              sm: 2,
-              md: 3,
-              xl: 4,
-            }}
-            dataSource={search ? nftData : undefined}
-            // eslint-disable-next-line @typescript-eslint/naming-convention
-            renderItem={({ name, token_id, token_uri, image }) => (
-              <List.Item>
-                <Card
-                  style={{ width: 200 }}
-                  cover={
-                    <img
-                      alt='example'
-                      src={image ?? NO_IMAGE}
-                      style={{ minHeight: 200 }}
-                    />
-                  }
-                  hoverable
-                  actions={[
-                    <HeartOutlined
-                      key='add'
-                      onClick={() => console.log('added to wishlist')}
-                    />,
-                  ]}
-                >
-                  <Meta title={name} description={`#${token_id as string}`} />
-                </Card>
-              </List.Item>
-            )}
-            style={{ marginTop: 16 }}
-          />
-        </div>
-        <div style={{ width: '20%', background: 'green' }}>Wishlist</div>
+          dataSource={search ? nftData : undefined}
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          renderItem={({ name, token_id, token_uri, image }) => (
+            <List.Item>
+              <Card
+                style={{ width: 200 }}
+                cover={
+                  <img
+                    alt='example'
+                    src={image ?? NO_IMAGE}
+                    style={{ minHeight: 200 }}
+                  />
+                }
+                hoverable
+                actions={[
+                  <HeartOutlined
+                    key='add'
+                    onClick={() => console.log('added to wishlist')}
+                  />,
+                ]}
+              >
+                <Meta title={name} description={`#${token_id as string}`} />
+              </Card>
+            </List.Item>
+          )}
+          style={{ marginTop: 16 }}
+        />
       </div>
     </Page>
   )

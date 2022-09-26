@@ -1,12 +1,19 @@
-import { HomeOutlined, WalletOutlined } from '@ant-design/icons'
-import { MyRoutes } from 'layout/Primary/Header/Header.props'
+import { ReactNode } from 'react'
+import { HomeOutlined, SearchOutlined } from '@ant-design/icons'
 
-export const routes: MyRoutes = [
-  { path: '/', heading: 'My Home', title: 'Home', icon: <HomeOutlined /> },
+export interface Route {
+  path: string
+  title: string
+  icon: ReactNode
+}
+
+export type AppRoutes = Route[]
+
+export const routes: AppRoutes = [
+  { path: '/', title: 'Home', icon: <HomeOutlined /> },
   {
     path: '/explore',
-    heading: 'My Explore',
     title: 'Explore',
-    icon: <WalletOutlined />,
+    icon: <SearchOutlined />,
   },
 ]
