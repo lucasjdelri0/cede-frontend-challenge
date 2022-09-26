@@ -1,4 +1,5 @@
-.ant-row {
+.ant-row .ant-card-actions {
   justify-content: space-between;
   /* justify-content: space-between; */
+  background-color: lightgray;
 }
