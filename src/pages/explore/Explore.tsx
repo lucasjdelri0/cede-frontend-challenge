@@ -1,11 +1,17 @@
-import { HeartOutlined } from '@ant-design/icons'
+import { useEffect, useState } from 'react'
+import { HeartOutlined, HeartFilled } from '@ant-design/icons'
 import { Card, List } from 'antd'
 import axios, { AxiosResponse } from 'axios'
 import { ethers } from 'ethers'
+import {
+  addToWishlist,
+  removeFromWishlist,
+  selectWishlistNfts,
+} from 'store/wishlist'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
 import minAbi from 'utils/minAbi.json'
 import InputSearch from 'components/InputSearch'
 import Page from 'components/Page'
-import { useEffect, useState } from 'react'
 import './Explore.css'
 
 const { Meta } = Card
@@ -18,8 +24,20 @@ export const Explore = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(false)
   const [nftData, setNftData] = useState([])
 
+  const wishlist = useAppSelector(selectWishlistNfts)
+  const dispatch = useAppDispatch()
+
   const { ethereum } = window
   const provider = new ethers.providers.Web3Provider(ethereum)
+
+  const checkInWishlist = (tokenAddress: string, tokenId: string): boolean => {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    return wishlist.some(
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      ({ token_address, token_id }) =>
+        token_address === tokenAddress && token_id === tokenId
+    )
+  }
 
   useEffect(() => {
     const fetch = async (): Promise<void> => {
@@ -112,29 +130,56 @@ export const Explore = (): JSX.Element => {
           }}
           dataSource={search ? nftData : undefined}
           // eslint-disable-next-line @typescript-eslint/naming-convention
-          renderItem={({ name, token_id, token_uri, image }) => (
-            <List.Item>
-              <Card
-                style={{ width: 200 }}
-                cover={
-                  <img
-                    alt='example'
-                    src={image ?? NO_IMAGE}
-                    style={{ minHeight: 200 }}
-                  />
+          renderItem={({ image, name, token_address, token_id, token_uri }) => {
+            const isInWishlist = checkInWishlist(token_address, token_id)
+            const wishlistAction = !isInWishlist ? (
+              <HeartOutlined
+                key='add'
+                onClick={() =>
+                  dispatch(
+                    addToWishlist({
+                      image,
+                      name,
+                      token_address,
+                      token_id,
+                      token_uri,
+                    })
+                  )
                 }
-                hoverable
-                actions={[
-                  <HeartOutlined
-                    key='add'
-                    onClick={() => console.log('added to wishlist')}
-                  />,
-                ]}
-              >
-                <Meta title={name} description={`#${token_id as string}`} />
-              </Card>
-            </List.Item>
-          )}
+              />
+            ) : (
+              <HeartFilled
+                key='remove'
+                style={{ color: 'red' }}
+                onClick={() =>
+                  dispatch(
+                    removeFromWishlist({
+                      token_address,
+                      token_id,
+                    })
+                  )
+                }
+              />
+            )
+            return (
+              <List.Item>
+                <Card
+                  style={{ width: 200 }}
+                  cover={
+                    <img
+                      alt={image ? 'example' : 'no_image'}
+                      src={image ?? NO_IMAGE}
+                      style={{ minHeight: 200 }}
+                    />
+                  }
+                  hoverable
+                  actions={[wishlistAction]}
+                >
+                  <Meta title={name} description={`#${token_id as string}`} />
+                </Card>
+              </List.Item>
+            )
+          }}
           style={{ marginTop: 16 }}
         />
       </div>
