@@ -153,8 +153,6 @@ export const Explore = (): JSX.Element => {
           }}
           dataSource={search ? nftData : undefined}
           renderItem={({ image, name, token_address, token_id, token_uri }) => {
-            console.log('token_uri')
-            console.log(token_uri)
             const shortAddress = shortenAddress(token_address)
             const isInWishlist = checkInWishlist(token_address, token_id)
             const wishlistAction = !isInWishlist ? (
@@ -189,7 +187,12 @@ export const Explore = (): JSX.Element => {
             return (
               <List.Item>
                 <Card
-                  style={{ width: 200, overflow: 'hidden', borderRadius: 16 }}
+                  style={{
+                    width: 200,
+                    overflow: 'hidden',
+                    border: '1px solid lightgrey',
+                    borderRadius: 16,
+                  }}
                   cover={
                     <img
                       alt={image ? 'image' : 'no_image'}

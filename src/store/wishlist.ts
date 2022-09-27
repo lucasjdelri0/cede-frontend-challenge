@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { message } from 'antd'
 import { RootState } from 'store'
 import { NftMetadata, NftTokenInfo, WishlistState } from './types'
 
@@ -13,17 +13,14 @@ const wishlistSlice = createSlice({
   reducers: {
     addToWishlist(state, action: PayloadAction<NftMetadata>) {
       state.nfts = [...state.nfts, action.payload]
-      message.success('NFT added to Wishlist')
     },
     removeFromWishlist(state, action: PayloadAction<NftTokenInfo>) {
       const filtered = state.nfts.filter(
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         ({ token_address, token_id }) =>
           token_address !== action.payload.token_address ||
           token_id !== action.payload.token_id
       )
       state.nfts = filtered
-      message.success('NFT deleted from Wishlist')
     },
   },
 })
