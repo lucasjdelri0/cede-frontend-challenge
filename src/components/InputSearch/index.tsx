@@ -20,6 +20,7 @@ const SearchInput = ({
       onChange={(e) => handleChange(e.target.value)}
       prefix={isLoading ? <LoadingOutlined /> : <SearchOutlined />}
       allowClear
+      style={{ minWidth: 100, maxWidth: 400 }}
     />
   )
 }
