@@ -1,25 +1,49 @@
-import { HeartOutlined } from '@ant-design/icons'
-import { Card, List } from 'antd'
+/* eslint-disable @typescript-eslint/naming-convention */
+import { useEffect, useState } from 'react'
+import {
+  HeartOutlined,
+  HeartFilled,
+  CloseCircleOutlined,
+} from '@ant-design/icons'
+import { Button, Card, Drawer, List, Space, Typography } from 'antd'
 import axios, { AxiosResponse } from 'axios'
 import { ethers } from 'ethers'
+import {
+  addToWishlist,
+  removeFromWishlist,
+  selectWishlistNfts,
+} from 'store/wishlist'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { shortenAddress } from 'utils'
 import minAbi from 'utils/minAbi.json'
 import InputSearch from 'components/InputSearch'
 import Page from 'components/Page'
-import { useEffect, useState } from 'react'
 import './Explore.css'
 
+const { Text, Link } = Typography
 const { Meta } = Card
 
 const MORALIS_API_BASE_URL = 'https://deep-index.moralis.io/api/v2'
 const NO_IMAGE = 'images/no-img.png'
 
 export const Explore = (): JSX.Element => {
+  const [open, setOpen] = useState(false)
   const [search, setSearch] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
   const [nftData, setNftData] = useState([])
 
+  const wishlist = useAppSelector(selectWishlistNfts)
+  const dispatch = useAppDispatch()
+
   const { ethereum } = window
   const provider = new ethers.providers.Web3Provider(ethereum)
+
+  const checkInWishlist = (tokenAddress: string, tokenId: string): boolean => {
+    return wishlist.some(
+      ({ token_address, token_id }) =>
+        token_address === tokenAddress && token_id === tokenId
+    )
+  }
 
   useEffect(() => {
     const fetch = async (): Promise<void> => {
@@ -84,6 +108,14 @@ export const Explore = (): JSX.Element => {
     }
   }
 
+  const showDrawer = (): void => {
+    setOpen(true)
+  }
+
+  const onClose = (): void => {
+    setOpen(false)
+  }
+
   return (
     <Page>
       <div
@@ -97,11 +129,20 @@ export const Explore = (): JSX.Element => {
         <span style={{ marginBottom: 16 }}>
           Search NFTs by wallet, contract address, or collection name
         </span>
-        <InputSearch
-          placeholder='Type a wallet, contract address, or collection name'
-          onChange={(searchValue) => setSearch(searchValue ?? '')}
-          isLoading={loading}
-        />
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <InputSearch
+            placeholder='Type a wallet, contract address, or collection name'
+            onChange={(searchValue) => setSearch(searchValue ?? '')}
+            isLoading={loading}
+          />
+          <Button
+            type='primary'
+            onClick={showDrawer}
+            style={{ marginLeft: 24 }}
+          >
+            Wishlist <HeartOutlined />
+          </Button>
+        </div>
         <List
           grid={{
             gutter: 16,
@@ -111,33 +152,119 @@ export const Explore = (): JSX.Element => {
             xl: 4,
           }}
           dataSource={search ? nftData : undefined}
-          // eslint-disable-next-line @typescript-eslint/naming-convention
-          renderItem={({ name, token_id, token_uri, image }) => (
-            <List.Item>
-              <Card
-                style={{ width: 200 }}
-                cover={
-                  <img
-                    alt='example'
-                    src={image ?? NO_IMAGE}
-                    style={{ minHeight: 200 }}
-                  />
+          renderItem={({ image, name, token_address, token_id, token_uri }) => {
+            const shortAddress = shortenAddress(token_address)
+            const isInWishlist = checkInWishlist(token_address, token_id)
+            const wishlistAction = !isInWishlist ? (
+              <HeartOutlined
+                key='add'
+                onClick={() =>
+                  dispatch(
+                    addToWishlist({
+                      image,
+                      name,
+                      token_address,
+                      token_id,
+                      token_uri,
+                    })
+                  )
                 }
-                hoverable
-                actions={[
-                  <HeartOutlined
-                    key='add'
-                    onClick={() => console.log('added to wishlist')}
-                  />,
-                ]}
-              >
-                <Meta title={name} description={`#${token_id as string}`} />
-              </Card>
-            </List.Item>
-          )}
-          style={{ marginTop: 16 }}
+              />
+            ) : (
+              <HeartFilled
+                key='remove'
+                style={{ color: 'red' }}
+                onClick={() =>
+                  dispatch(
+                    removeFromWishlist({
+                      token_address,
+                      token_id,
+                    })
+                  )
+                }
+              />
+            )
+            return (
+              <List.Item>
+                <Card
+                  style={{
+                    width: 200,
+                    overflow: 'hidden',
+                    border: '1px solid lightgrey',
+                    borderRadius: 16,
+                  }}
+                  cover={
+                    <img
+                      alt={image ? 'image' : 'no_image'}
+                      src={image ?? NO_IMAGE}
+                      style={{ height: 200 }}
+                    />
+                  }
+                  hoverable
+                  actions={[
+                    // <GlobalOutlined
+                    //   onClick={() => window.open(token_uri, '_blank')}
+                    //   key='website'
+                    // />,
+                    wishlistAction,
+                  ]}
+                >
+                  <Meta
+                    title={name ?? 'Unnamed'}
+                    description={
+                      <Space direction='vertical'>
+                        <Text>{`Token ID: #${token_id as string}`}</Text>
+                        <Link
+                          href={`https://etherscan.io/address/${
+                            token_address as string
+                          }`}
+                          target='_blank'
+                          copyable={{ text: token_address }}
+                        >
+                          {shortAddress}
+                        </Link>
+                      </Space>
+                    }
+                    style={{ justifyContent: 'center' }}
+                  />
+                </Card>
+              </List.Item>
+            )
+          }}
+          style={{ flex: 1, marginTop: 16 }}
         />
       </div>
+      <Drawer title='NFTs Wishlist' onClose={onClose} open={open}>
+        {wishlist.length ? (
+          wishlist.map(({ name, token_address, token_id }) => (
+            <div
+              key={`${token_address}/${token_id}`}
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: 8,
+              }}
+            >
+              <span>{`${name} (#${token_id})`}</span>
+              <Button
+                type='text'
+                icon={<CloseCircleOutlined />}
+                onClick={() =>
+                  dispatch(
+                    removeFromWishlist({
+                      token_address,
+                      token_id,
+                    })
+                  )
+                }
+              />
+            </div>
+          ))
+        ) : (
+          <p>No items yet</p>
+        )}
+      </Drawer>
     </Page>
   )
 }
