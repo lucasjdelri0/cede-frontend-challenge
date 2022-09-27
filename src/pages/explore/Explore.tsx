@@ -87,11 +87,11 @@ export const Explore = (): JSX.Element => {
     // getWalletNFTs
     const walletUrl = `${MORALIS_API_BASE_URL}/${searchValue}/nft?chain=eth&format=decimal`
     // getContractNFTs
-    const contractUrl = `${MORALIS_API_BASE_URL}/nft/${searchValue}?chain=eth&format=decimal&limit=50`
+    const contractUrl = `${MORALIS_API_BASE_URL}/nft/${searchValue}?chain=eth&format=decimal&limit=100`
     // searchNFTs
     const searchUrl = `${MORALIS_API_BASE_URL}/nft/search?chain=eth&format=decimal&q=${encodeURIComponent(
       searchValue
-    )}&filter=global&limit=50`
+    )}&filter=global&limit=100`
 
     if (ethers.utils.isAddress(searchValue)) {
       const address = ethers.utils.getAddress(searchValue)
@@ -119,6 +119,7 @@ export const Explore = (): JSX.Element => {
   return (
     <Page>
       <div
+        className='my-container'
         style={{
           display: 'flex',
           flexDirection: 'column',
@@ -126,32 +127,42 @@ export const Explore = (): JSX.Element => {
           padding: '0 24px',
         }}
       >
-        <span style={{ marginBottom: 16 }}>
-          Search NFTs by wallet, contract address, or collection name
-        </span>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <InputSearch
-            placeholder='Type a wallet, contract address, or collection name'
-            onChange={(searchValue) => setSearch(searchValue ?? '')}
-            isLoading={loading}
-          />
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button
             type='primary'
             onClick={showDrawer}
             style={{ marginLeft: 24 }}
           >
-            Wishlist <HeartOutlined />
+            <HeartOutlined />
+            Wishlist
           </Button>
+        </div>
+        <span style={{ margin: '16px 0' }}>
+          Search NFTs by wallet, contract address, or collection name
+        </span>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <InputSearch
+            placeholder='Type a wallet, contract address, or collection name'
+            onChange={(searchValue) => setSearch(searchValue ?? '')}
+            isLoading={loading}
+          />
         </div>
         <List
           grid={{
             gutter: 16,
-            xs: 1,
-            sm: 2,
-            md: 3,
-            xl: 4,
           }}
           dataSource={search ? nftData : undefined}
+          pagination={{
+            pageSize: 24,
+            position: 'bottom',
+            style: {
+              marginBottom: 16,
+            },
+            total: nftData.length,
+            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
+            showSizeChanger: false,
+          }}
+          loading={loading}
           renderItem={({ image, name, token_address, token_id, token_uri }) => {
             const shortAddress = shortenAddress(token_address)
             const isInWishlist = checkInWishlist(token_address, token_id)
@@ -187,6 +198,7 @@ export const Explore = (): JSX.Element => {
             return (
               <List.Item>
                 <Card
+                  className='my-card'
                   style={{
                     width: 200,
                     overflow: 'hidden',
@@ -231,7 +243,13 @@ export const Explore = (): JSX.Element => {
               </List.Item>
             )
           }}
-          style={{ flex: 1, marginTop: 16 }}
+          className='my-list'
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            flex: 1,
+            marginTop: 16,
+          }}
         />
       </div>
       <Drawer title='NFTs Wishlist' onClose={onClose} open={open}>
