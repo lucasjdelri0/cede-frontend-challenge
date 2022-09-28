@@ -1,6 +1,52 @@
-# Getting Started with Create React App
+# CEDE Labs Frontend Challenge
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is intended to solve the [frontend challenge](https://github.com/CeDe-Keyper/frontend-challenge) proposed by CEDE Labs.
+
+The project was created with [Create React App](https://github.com/facebook/create-react-app) by [Lucas Del Rio](https://github.com/lucasjdelri0).
+
+## Solution
+
+### Features
+
+Basically, you will be able to explore NFTs by typing a wallet address, contract address, or even a collection name, and you can save them to your wishlist.
+
+Main Features:
+
+- Explore NFTs by wallet address, contract address, or even by collection name.
+- NFTs Wishlist (add/remove).
+
+The application analyzes the input format to decide which search to perform.
+
+The following cases may occur:
+
+1- The input does not match an address format. The application searches for NFTs by collection name.
+
+2- The input matches an address format.
+
+- If a contract instance can be created with the entered address, the input will be considered as a contract address. In this case, the application searches for NFTs by contract address.
+
+- A contract instance cannot be created with the entered address. In this case, the input is considered as an Externally Owned Account (EOA, basically a wallet), and the application searches for NFTs by wallet address.
+
+> NOTES:
+>
+> In order to identify whether it is a contract address or an EOA, it will be necessary that you have [MetaMask](https://metamask.io/download/) installed and that you are connected to the Ethereum Mainnet. This way, our application will be able to obtain a Web3Provider and generate a contract instance with a minimum ABI.
+
+### NFT API
+
+The project uses [Moralis NFT API](https://docs.moralis.io/reference/nft-api) to fetch NFT data.
+
+Main Endpoints
+
+- [getWalletNFTs](https://docs.moralis.io/reference/getwalletnfts-1)
+- [getContractNFTs](https://docs.moralis.io/reference/getcontractnfts-1)
+- [searchNFTs](https://docs.moralis.io/reference/searchnfts-2)
+
+See the [Moralis Swagger](https://deep-index.moralis.io/api-docs-2.1/) for more info about endpoints.
+
+> NOTES:
+>
+> - Before start, you need to configure your own Moralis API Key as an env variable under the name of `REACT_APP_NFT_API`.
+> - The project is using the Ethereum Mainnet as the blockchain where to fetch from.
 
 ## Available Scripts
 
@@ -11,36 +57,40 @@ In the project directory, you can run:
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
 ### `yarn test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Launches the test runner in the interactive watch mode.
 
-### `yarn build`
+### `yarn lint`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Instructs ESLint to identify and try to fix as many issues as possible in .js, .jsx, .ts, and .tsx files.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### `yarn format:check`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Check if your files are formatted to the intended Prettier config, and get a list of the unformatted files, if any.
 
-### `yarn eject`
+### `yarn format:write`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Format all your files to the intended Prettier config.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+> NOTES:
+>
+> - Use .eslintignore and .prettierignore to ignore files that should not be analyzed and/or formatted
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Vercel Deployment
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+You can access a production deployment in [Vercel](https://cede-frontend-challenge.vercel.app/) for a quick testing.
 
-## Learn More
+## Resources
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+[CEDE Labs Frontend Challenge](https://github.com/CeDe-Keyper/frontend-challenge)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+[Moralis API Reference](https://docs.moralis.io/reference/nft-api)
+
+[AntDesing Docs](https://ant.design/docs/react/introduce)
+
+[AntDesing Components](https://ant.design/components/overview/)
+
+[ESLint Rules](https://eslint.org/docs/latest/rules/)
+
+[Prettier Options](https://prettier.io/docs/en/options.html)
