@@ -1,12 +1,23 @@
-import { configureStore } from '@reduxjs/toolkit'
-import wishlistSlice from './wishlist'
+import {
+  combineReducers,
+  configureStore,
+  PreloadedState,
+} from '@reduxjs/toolkit'
+import wishlistReducer from './wishlist'
 
-export const store = configureStore({
-  reducer: {
-    wishlist: wishlistSlice,
-  },
-  devTools: true,
+const rootReducer = combineReducers({
+  wishlist: wishlistReducer,
 })
 
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
+  return configureStore({
+    reducer: rootReducer,
+    preloadedState,
+    devTools: true,
+  })
+}
+
+export type RootState = ReturnType<typeof rootReducer>
+export type AppStore = ReturnType<typeof setupStore>
+export type AppDispatch = AppStore['dispatch']
