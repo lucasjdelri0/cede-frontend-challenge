@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
-import { store } from './store'
+import { setupStore } from 'store'
 import App from './App'
 import './index.css'
 import reportWebVitals from './reportWebVitals'
@@ -17,7 +17,7 @@ declare global {
 
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
+    <Provider store={setupStore()}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
