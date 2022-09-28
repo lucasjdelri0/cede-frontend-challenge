@@ -1,0 +1,14 @@
+.my-container .ant-row {
+  justify-content: center;
+}
+
+.my-card .ant-card-actions {
+  background-color: lightgray;
+}
+
+.my-list .ant-spin-nested-loading {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+}
