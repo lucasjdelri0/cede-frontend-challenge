@@ -4,7 +4,7 @@ import { HeartOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
 import axios, { AxiosResponse } from 'axios'
 import Page from 'components/Page'
-import InputSearch from 'components/InputSearch'
+import SearchInput from 'components/SearchInput'
 import NftList from 'components/NftList'
 import { WishlistDrawer } from 'components/wishlist/WishlistDrawer/WishlistDrawer'
 import { selectWishlistNfts } from 'store/wishlist'
@@ -92,10 +92,10 @@ export const Explore = (): JSX.Element => {
           Search NFTs by wallet, contract address, or collection name
         </span>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <InputSearch
+          <SearchInput
             placeholder='Type a wallet, contract address, or collection name'
             onChange={(searchValue) => setSearch(searchValue ?? '')}
-            isLoading={loading}
+            loading={loading}
           />
         </div>
         <NftList nfts={nfts} wishlist={wishlist} loading={loading} />

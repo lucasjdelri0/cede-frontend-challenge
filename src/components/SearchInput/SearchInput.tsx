@@ -1,28 +1,24 @@
 import { Input } from 'antd'
 import { SearchOutlined, LoadingOutlined } from '@ant-design/icons'
+import { SearchInputProps } from './SearchInput.props'
 
-const SearchInput = ({
+export const SearchInput = ({
   placeholder,
   onChange,
-  isLoading = false,
-}: {
-  placeholder?: string
-  onChange: (value?: string) => void
-  isLoading: boolean
-}): JSX.Element => {
+  loading = false,
+}: SearchInputProps): JSX.Element => {
   const handleChange = (search: string): void => {
-    onChange(search)
+    onChange?.(search)
   }
 
   return (
     <Input
+      aria-label='search-input'
       placeholder={placeholder}
       onChange={(e) => handleChange(e.target.value)}
-      prefix={isLoading ? <LoadingOutlined /> : <SearchOutlined />}
+      prefix={loading ? <LoadingOutlined /> : <SearchOutlined />}
       allowClear
       style={{ minWidth: 100, maxWidth: 400 }}
     />
   )
 }
-
-export default SearchInput
