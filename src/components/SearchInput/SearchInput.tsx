@@ -13,7 +13,7 @@ export const SearchInput = ({
 
   return (
     <Input
-      aria-label='search-input'
+      aria-label={placeholder}
       placeholder={placeholder}
       onChange={(e) => handleChange(e.target.value)}
       prefix={loading ? <LoadingOutlined /> : <SearchOutlined />}

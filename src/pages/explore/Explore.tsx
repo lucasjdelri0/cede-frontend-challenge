@@ -102,6 +102,9 @@ export const Explore = (): JSX.Element => {
       </div>
       <WishlistDrawer
         title='My Favorite NFTs'
+        emptyState={
+          <p aria-label='No items in wishlist'>No items in wishlist</p>
+        }
         open={open}
         nfts={wishlist}
         onClose={onCloseDrawer}
